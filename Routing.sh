@@ -1,3 +1,5 @@
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.176.0.0/16
+echo nameserver 192.168.122.1 > /etc/resolv.conf
 # Strix
 
 route add -net 192.176.7.0 netmask 255.255.255.128 gw 192.176.7.146 #FROGER
