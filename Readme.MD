@@ -257,11 +257,6 @@ Tugas berikutnya adalah memberikan ip pada subnet Forger, Desmond, Blackbell, da
         option routers 192.176.7.129;
     }
 
-    option domain-name "example.org";
-    option domain-name-servers ns1.example.org, ns2.example.org;
-    default-lease-time 600;
-    max-lease-time 7200;
-    log-facility local7;
     ```
   - Melakukan restart server dengan syntax :
     ```
