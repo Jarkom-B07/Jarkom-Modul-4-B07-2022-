@@ -375,7 +375,7 @@ iptables -A PREROUTING -t nat -p tcp --dport 443 -d 192.176.7.139 -j DNAT --to-d
 **Soal 6**
 Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server dan router ditambahkan logging paket yang di-drop dengan standard syslog level.
 
-**Pembaahasan**
+**Pembahasan**
 - Melakukan konfigurasi berikut pada DNS Server **(Eden)** dan DHCP SERVER **(Wise)**:
     ```sh
     iptables -N LOGGING
@@ -389,4 +389,8 @@ Karena Loid ingin tau paket apa saja yang di-drop, maka di setiap node server da
     ```
     service rsyslog restart
     ```
+
+**Testing**
+
+ ![6.1](/src/6.1.png)
 
