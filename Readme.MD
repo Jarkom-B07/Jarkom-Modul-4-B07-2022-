@@ -303,8 +303,12 @@ Agar topologi yang kalian buat dapat mengakses keluar, kalian diminta untuk meng
 **Pembahasan**
 melakukan konfigurasi pada **Strix**, dengan syntax :
 ```
-iptables -t nat -A POSTROUTING -s 192.176.0.0/21 -o eth0 -j SNAT --to-source 19$ bash /root/routing.sh
+iptables -t nat -A POSTROUTING -s 192.176.0.0/21 -o eth0 -j SNAT --to-source 192.168.122.213
 ```
+
+**Testing**
+![tesing1](/src/testing1.png)
+
 
 ### Soal 2 ###
 Kalian diminta untuk melakukan drop semua TCP dan UDP dari luar Topologi kalian pada server yang merupakan DHCP Server demi menjaga keamanan.
@@ -315,6 +319,10 @@ melakuakn konfiguransi pada **WISE**, dengan syntax :
 iptables -A FORWARD -d 192.176.7.128/29 -i eth0 -p tcp --dport 80 -j DROP
 iptables -A FORWARD -d 192.176.7.128/29 -i eth0 -p udp --dport 80 -j DROP
 ```
+
+**Testing**
+![tesing2](/src/testing2.png)
+
 ### Soal 3 ###
 Loid meminta kalian untuk membatasi DHCP dan DNS Server hanya boleh menerima maksimal 2 koneksi ICMP secara bersamaan menggunakan iptables, selebihnya didrop.
 
@@ -325,16 +333,38 @@ iptables -A INPUT -p icmp -m connlimit --connlimit-above 2 --connlimit-mask 0 -$
 ```
 konfigurasi diatas akan melakukan reject bila terdapat ping lebih dari 3
 
+**Testing**
+- DHCP SERVER (WISE)
+    ![3.1](/src/3.1.png)
+    ![3.2](/src/3.2.png)
+    ![3.3](/src/3.3.png)
+- DNS SERVER (EDEN)
+    ![3.4](/src/3.4.png)
+    ![3.5](/src/3.5.png)
+    ![3.6](/src/3.6.png)
+
+
 ### Soal 4 ###
 Akses menuju Web Server hanya diperbolehkan disaat jam kerja yaitu Senin sampai Jumat pada pukul 07.00 - 16.00.
 
 **Pembahasan :**
 
-Melakukan pembatasan pada **Web Server**, yakni Garden dan SSS dengan menggunakan syntax berikut pada DNS Server (Eden):
+Melakukan pembatasan pada **Web Server**, yakni Garden dan SSS dengan menggunakan syntax berikut pada 
+- DNS Server (Eden):
 ```sh
 iptables -A INPUT -s 192.176.7.136/29 -m time --timestart 07:00 --timestop 16:0$ 
 iptables -A INPUT -s 192.176.7.136/29 -j REJECT
 ```
+
+- Node Garden dan SSS (Web Server)
+```
+iptables -A INPUT -m time --timestart 07:00 --timestop 16:00 --weekdays Mon,Tue,Wed,Thu,Fri -j ACCEPT
+iptables -A INPUT -j REJECT
+```
+
+**Testing**
+![4.1](/src/4.1.png)
+
 ### Soal 5 ###
 Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap request dari client yang mengakses Garden dengan port 80 akan didistribusikan secara bergantian pada SSS dan Garden secara berurutan dan request dari client yang mengakses SSS dengan port 443 akan didistribusikan secara bergantian pada Garden dan SSS secara berurutan.
 
