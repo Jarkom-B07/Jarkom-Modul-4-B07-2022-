@@ -370,15 +370,11 @@ Karena kita memiliki 2 Web Server, Loid ingin Ostania diatur sehingga setiap req
 
 **Pembahasan**
 Melakukan konfigurasi berikut pada DNS Server **(Eden)** : 
-```sh
-iptables -A PREROUTING -t nat -p tcp -d 192.176.7.128/29 --dport 80 -m statisti$ 
-iptables -A PREROUTING -t nat -p tcp -d 192.176.7.128/29 --dport 443 -m statist$ 
-iptables -A PREROUTING -t nat -p tcp -d 192.176.7.128/29 --dport 80 -j DNAT --t$ 
-iptables -A PREROUTING -t nat -p tcp -d 192.176.7.128/29 --dport 443 -j DNAT --$ 
-iptables -t nat -A POSTROUTING -p tcp -d 192.176.7.138 --dport 80 -j SNAT --to-$ 
-iptables -t nat -A POSTROUTING -p tcp -d 192.176.7.139 --dport 443 -j SNAT --to$ 
-iptables -t nat -A POSTROUTING -p tcp -d 192.176.7.138 --dport 80 -j SNAT --to-$ 
-iptables -t nat -A POSTROUTING -p tcp -d 192.176.7.139 --dport 443 -j SNAT --to$
+```
+iptables -A PREROUTING -t nat -p tcp --dport 80 -d 192.176.7.138 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.176.7.138:80
+iptables -A PREROUTING -t nat -p tcp --dport 80 -d 192.176.7.138 -j DNAT --to-destination 192.176.7.139:80
+iptables -A PREROUTING -t nat -p tcp --dport 443 -d 192.176.7.139 -m statistic --mode nth --every 2 --packet 0 -j DNAT --to-destination 192.176.7.139:443
+iptables -A PREROUTING -t nat -p tcp --dport 443 -d 192.176.7.139 -j DNAT --to-destination 192.176.7.138:443
 ```
 
 **Soal 6**
